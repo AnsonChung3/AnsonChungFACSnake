@@ -50,13 +50,15 @@ document.addEventListener('keydown', (event) => {
             if (direction !== 'left') { direction = 'right'; }
             break;
         case ' ':
-            isPause = !isPause;
-            if (isPause) {
-                clearInterval(gameLoop);
-            } else {
-                gameLoop = setInterval(() => {
-                    moveSnake();
-                }, gameSpeed);
+            if (food.length > 0 && !isGameOver) {
+                isPause = !isPause;
+                if (isPause) {
+                    clearInterval(gameLoop);
+                } else {
+                    gameLoop = setInterval(() => {
+                        moveSnake();
+                    }, gameSpeed);
+                }   
             }
             break;
         case 'r':
