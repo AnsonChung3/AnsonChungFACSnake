@@ -10,11 +10,18 @@ ctx.fillStyle = '#da5151ff';
 // ctx.fillRect(0, 0, 50, gameCanvas.height);
 
 // food generation
-let food = [{}]
+let food = []
 
 function generateFood() {
-    food[0]['x'] = Math.floor(Math.random() * GRID_COUNT);
-    food[0]['y'] = Math.floor(Math.random() * GRID_COUNT);
+    let mockX = Math.floor(Math.random() * GRID_COUNT);
+    let mockY = Math.floor(Math.random() * GRID_COUNT);
+    
+    while (snake.some(segment => segment.x === mockX && segment.y === mockY )) {
+        mockX = Math.floor(Math.random() * GRID_COUNT);
+        mockY = Math.floor(Math.random() * GRID_COUNT);
+    }
+    return food.push({ x: mockX, y: mockY });
+    
 }
 
 function drawFood() {
@@ -50,4 +57,5 @@ function drawOnCanvas(o14n, c9s) {
 
 document.addEventListener('DOMContentLoaded', () => {
     drawOnCanvas(2, snake);
+    // testAutoFood();
 });
