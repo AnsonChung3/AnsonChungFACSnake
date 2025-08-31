@@ -56,7 +56,7 @@ document.addEventListener('keydown', (event) => {
             } else {
                 gameLoop = setInterval(() => {
                     moveSnake();
-                }, GAME_SPEED);
+                }, gameSpeed);
             }
             break;
         case 'r':
@@ -88,6 +88,8 @@ function isCollide(newHead) {
 // pause is default to true so that the snake won't move until user presses a key
 let isPause = true;
 let isGameOver = false;
+let score = 0;
+let sessionHighScore = 0;
 
 function moveSnake() {
     if (isPause) {
@@ -107,6 +109,10 @@ function moveSnake() {
         alert('Game Over! Press R to restart.');
         isGameOver = true;
         isPause = true;
+        if (score > sessionHighScore) {
+            sessionHighScore = score;
+            document.getElementById('session-high').textContent = sessionHighScore;
+        }
         return;
     }
     // else, draw and add new head
@@ -119,6 +125,16 @@ function moveSnake() {
         food = [];
         generateFood();
         drawOnCanvas(1, food);
+        score++;
+        document.getElementById('current-score').textContent = score;
+        if (score % 5 === 0 && gameSpeed > 50) {
+            gameSpeed -= 50;
+            console.log(gameSpeed)
+            clearInterval(gameLoop);
+            gameLoop = setInterval(() => {
+                moveSnake();
+            }, gameSpeed);
+        }
         return
     }
     // else, remove tail
@@ -139,10 +155,12 @@ function resetGame() {
     food = [];
     isGameOver = false;
     direction = 'right';
+    score = 0;
+    document.getElementById('current-score').textContent = score;
 }
 
 let gameLoop;
-let GAME_SPEED = 300;
+let gameSpeed = 300;
 
 function initGame() {
     generateFood();
@@ -155,7 +173,7 @@ function initGame() {
     }
     gameLoop = setInterval(() => {
         moveSnake();
-    }, GAME_SPEED);
+    }, gameSpeed);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
