@@ -53,9 +53,54 @@ function drawOnCanvas(o14n, c9s) {
         ctx.fillRect(coord.x * GRID_SIZE, coord.y * GRID_SIZE, GRID_SIZE, GRID_SIZE);
     });
 }
-    
+
+let direction = 'right';
+
+document.addEventListener('keydown', (event) => {
+    switch(event.key.toLowerCase()) {
+        case 'w':
+            if (direction !== 'down') { direction = 'up'; }
+            console.log(`new direction: ${direction}`);
+            break;
+        case 's':
+            if (direction !== 'up') { direction = 'down';}
+            console.log(`new direction: ${direction}`);
+            break;
+        case 'a':
+            if (direction !== 'right') { direction = 'left'; }
+            console.log(`new direction: ${direction}`);
+            break;
+        case 'd':
+            if (direction !== 'left') { direction = 'right'; }
+            console.log(`new direction: ${direction}`);
+            break;}
+});
+
+function moveSnake() {
+    const mockNewHead = {...snake[0]};
+    switch(direction) {
+        case 'up': mockNewHead.y--; break;
+        case 'down': mockNewHead.y++; break;
+        case 'left': mockNewHead.x--; break;
+        case 'right': mockNewHead.x++; break;
+    }
+
+    const oldTail = snake[snake.length - 1];
+    // given scenario the snake move safely without eating food
+    drawOnCanvas(2, [mockNewHead]);
+    ctx.clearRect(oldTail.x * GRID_SIZE, oldTail.y * GRID_SIZE, GRID_SIZE, GRID_SIZE);
+    snake.unshift(mockNewHead); // add new head at the front
+    snake.pop(); // remove tail
+}
+
+function testAutoMove() {
+    setInterval(() => {
+        moveSnake();
+    }, 1000);
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     drawOnCanvas(2, snake);
     // testAutoFood();
+    // testAutoMove()
 });
