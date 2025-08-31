@@ -159,6 +159,7 @@ function resetGame() {
     direction = 'right';
     score = 0;
     document.getElementById('current-score').textContent = score;
+    gameSpeed = 300;
 }
 
 let gameLoop;
