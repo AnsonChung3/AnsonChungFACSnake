@@ -29,6 +29,13 @@ function testAutoFood() {
     }, 2000);
 }
 
+// init 3 length snake
+let snake = [
+    { x: 5, y: 5 },
+    { x: 4, y: 5 },
+    { x: 3, y: 5 }
+];
+
 
 function drawOnCanvas(o14n, c9s) {
     // o14n => abbreviation for "object being drawn"; it should be a number; 1 for food, 2 for snake
@@ -42,5 +49,5 @@ function drawOnCanvas(o14n, c9s) {
     
 
 document.addEventListener('DOMContentLoaded', () => {
-    testAutoFood();
+    drawOnCanvas(2, snake);
 });
