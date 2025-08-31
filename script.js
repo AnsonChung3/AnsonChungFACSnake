@@ -73,6 +73,20 @@ document.addEventListener('keydown', (event) => {
             break;}
 });
 
+function isCollide(newHead) {
+    // wall collide
+    if (newHead.x < 0 || newHead.x >= GRID_COUNT || newHead.y < 0 || newHead.y >= GRID_COUNT) {
+        return true;
+    }
+    // self collide
+    for (let i = 0; i < snake.length; i++) {
+        if (snake[i].x === newHead.x && snake[i].y === newHead.y) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function moveSnake() {
     const mockNewHead = {...snake[0]};
     switch(direction) {
@@ -82,11 +96,18 @@ function moveSnake() {
         case 'right': mockNewHead.x++; break;
     }
 
-    const oldTail = snake[snake.length - 1];
-    // given scenario the snake move safely without eating food
+    // if collide, game over
+    if (isCollide(mockNewHead)) {
+        alert('Game Over!');
+        return;
+    }
+    // else, add new head
     drawOnCanvas(2, [mockNewHead]);
+    snake.unshift(mockNewHead);
+
+    // if NO eating food, remove tail
+    const oldTail = snake[snake.length - 1];
     ctx.clearRect(oldTail.x * GRID_SIZE, oldTail.y * GRID_SIZE, GRID_SIZE, GRID_SIZE);
-    snake.unshift(mockNewHead); // add new head at the front
     snake.pop(); // remove tail
 }
 
@@ -99,5 +120,5 @@ function testAutoMove() {
 document.addEventListener('DOMContentLoaded', () => {
     drawOnCanvas(2, snake);
     // testAutoFood();
-    // testAutoMove()
+    testAutoMove()
 });
