@@ -6,9 +6,6 @@ const ctx = gameCanvas.getContext('2d');
 gameCanvas.width = GRID_SIZE * GRID_COUNT;
 gameCanvas.height = GRID_SIZE * GRID_COUNT;
 
-ctx.fillStyle = '#da5151ff';
-// ctx.fillRect(0, 0, 50, gameCanvas.height);
-
 // food generation
 let food = []
 
