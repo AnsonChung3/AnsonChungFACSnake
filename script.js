@@ -7,14 +7,14 @@ gameCanvas.width = GRID_SIZE * GRID_COUNT;
 gameCanvas.height = GRID_SIZE * GRID_COUNT;
 
 ctx.fillStyle = '#da5151ff';
-ctx.fillRect(0, 0, 50, gameCanvas.height);
+// ctx.fillRect(0, 0, 50, gameCanvas.height);
 
 // food generation
-let food = {}
+let food = [{}]
 
 function generateFood() {
-    food.x = Math.floor(Math.random() * GRID_COUNT);
-    food.y = Math.floor(Math.random() * GRID_COUNT);
+    food[0]['x'] = Math.floor(Math.random() * GRID_COUNT);
+    food[0]['y'] = Math.floor(Math.random() * GRID_COUNT);
 }
 
 function drawFood() {
@@ -25,10 +25,22 @@ function drawFood() {
 function testAutoFood() {
     setInterval(() => {
         generateFood();
-        drawFood();
+        drawOnCanvas(1, food);
     }, 2000);
 }
 
-// document.addEventListener('DOMContentLoaded', () => {
-//     testAutoFood();
-// });
+
+function drawOnCanvas(o14n, c9s) {
+    // o14n => abbreviation for "object being drawn"; it should be a number; 1 for food, 2 for snake
+    // c9s => coordinates, it should be an array of {x: , y: }
+    fillColour = o14n === 1 ? '#DB826E' : '#da5151ff';
+    c9s.forEach(coord => {
+        ctx.fillStyle = fillColour;
+        ctx.fillRect(coord.x * GRID_SIZE, coord.y * GRID_SIZE, GRID_SIZE, GRID_SIZE);
+    });
+}
+    
+
+document.addEventListener('DOMContentLoaded', () => {
+    testAutoFood();
+});
