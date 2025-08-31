@@ -21,13 +21,6 @@ function generateFood() {
     
 }
 
-function testAutoFood() {
-    setInterval(() => {
-        generateFood();
-        drawOnCanvas(1, food);
-    }, 2000);
-}
-
 let snake = undefined;
 
 function drawOnCanvas(o14n, c9s) {
@@ -58,12 +51,22 @@ document.addEventListener('keydown', (event) => {
             break;
         case ' ':
             isPause = !isPause;
+            if (isPause) {
+                clearInterval(gameLoop);
+            } else {
+                gameLoop = setInterval(() => {
+                    moveSnake();
+                }, GAME_SPEED);
+            }
             break;
         case 'r':
             if (isGameOver) {
                 resetGame();
                 initGame();
             }
+            break;
+        case 'enter':
+            initGame();
             break;
     }
 });
@@ -84,7 +87,7 @@ function isCollide(newHead) {
 
 // pause is default to true so that the snake won't move until user presses a key
 let isPause = true;
-isGameOver = false;
+let isGameOver = false;
 
 function moveSnake() {
     if (isPause) {
@@ -154,11 +157,6 @@ function initGame() {
         moveSnake();
     }, GAME_SPEED);
 }
-
-const startBtn = document.getElementById('startBtn');
-startBtn.addEventListener('click', () => {
-    initGame();
-});
 
 document.addEventListener('DOMContentLoaded', () => {
     resetGame();
