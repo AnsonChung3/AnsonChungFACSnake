@@ -96,14 +96,22 @@ function moveSnake() {
         alert('Game Over!');
         return;
     }
-    // else, add new head
+    // else, draw and add new head
     drawOnCanvas(2, [mockNewHead]);
     snake.unshift(mockNewHead);
 
-    // if NO eating food, remove tail
+    // if snake gets to eat the food, remove food and return
+    // since the block food previously occupied is now occupied by the snake's new head
+    if (food[0].x === mockNewHead.x && food[0].y === mockNewHead.y) {
+        food = [];
+        generateFood();
+        drawOnCanvas(1, food);
+        return
+    }
+    // else, remove tail
     const oldTail = snake[snake.length - 1];
     ctx.clearRect(oldTail.x * GRID_SIZE, oldTail.y * GRID_SIZE, GRID_SIZE, GRID_SIZE);
-    snake.pop(); // remove tail
+    snake.pop();
 }
 
 function testAutoMove() {
