@@ -21,11 +21,6 @@ function generateFood() {
     
 }
 
-function drawFood() {
-    ctx.fillStyle = '#DB826E';
-    ctx.fillRect(food.x * GRID_SIZE, food.y * GRID_SIZE, GRID_SIZE, GRID_SIZE);
-}
-
 function testAutoFood() {
     setInterval(() => {
         generateFood();
