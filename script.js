@@ -28,13 +28,7 @@ function testAutoFood() {
     }, 2000);
 }
 
-// init 3 length snake
-let snake = [
-    { x: 5, y: 5 },
-    { x: 4, y: 5 },
-    { x: 3, y: 5 }
-];
-
+let snake = undefined;
 
 function drawOnCanvas(o14n, c9s) {
     // o14n => abbreviation for "object being drawn"; it should be a number; 1 for food, 2 for snake
@@ -52,20 +46,26 @@ document.addEventListener('keydown', (event) => {
     switch(event.key.toLowerCase()) {
         case 'w':
             if (direction !== 'down') { direction = 'up'; }
-            console.log(`new direction: ${direction}`);
             break;
         case 's':
             if (direction !== 'up') { direction = 'down';}
-            console.log(`new direction: ${direction}`);
             break;
         case 'a':
             if (direction !== 'right') { direction = 'left'; }
-            console.log(`new direction: ${direction}`);
             break;
         case 'd':
             if (direction !== 'left') { direction = 'right'; }
-            console.log(`new direction: ${direction}`);
-            break;}
+            break;
+        case ' ':
+            isPause = !isPause;
+            break;
+        case 'r':
+            if (isGameOver) {
+                resetGame();
+                initGame();
+            }
+            break;
+    }
 });
 
 function isCollide(newHead) {
@@ -82,7 +82,15 @@ function isCollide(newHead) {
     return false;
 }
 
+// pause is default to true so that the snake won't move until user presses a key
+let isPause = true;
+isGameOver = false;
+
 function moveSnake() {
+    if (isPause) {
+        return;
+    }
+
     const mockNewHead = {...snake[0]};
     switch(direction) {
         case 'up': mockNewHead.y--; break;
@@ -93,7 +101,9 @@ function moveSnake() {
 
     // if collide, game over
     if (isCollide(mockNewHead)) {
-        alert('Game Over!');
+        alert('Game Over! Press R to restart.');
+        isGameOver = true;
+        isPause = true;
         return;
     }
     // else, draw and add new head
@@ -114,14 +124,42 @@ function moveSnake() {
     snake.pop();
 }
 
-function testAutoMove() {
-    setInterval(() => {
-        moveSnake();
-    }, 1000);
+function resetGame() {
+    ctx.clearRect(0, 0, GRID_SIZE * GRID_COUNT, GRID_SIZE * GRID_COUNT);
+    const initSnake = [
+        { x: 5, y: 5 },
+        { x: 4, y: 5 },
+        { x: 3, y: 5 }
+    ];
+    snake = initSnake;
+    drawOnCanvas(2, snake);
+    food = [];
+    isGameOver = false;
+    direction = 'right';
 }
 
+let gameLoop;
+let GAME_SPEED = 300;
+
+function initGame() {
+    generateFood();
+    drawOnCanvas(1, food);
+    
+    isPause = false;
+
+    if (gameLoop) {
+        clearInterval(gameLoop);
+    }
+    gameLoop = setInterval(() => {
+        moveSnake();
+    }, GAME_SPEED);
+}
+
+const startBtn = document.getElementById('startBtn');
+startBtn.addEventListener('click', () => {
+    initGame();
+});
+
 document.addEventListener('DOMContentLoaded', () => {
-    drawOnCanvas(2, snake);
-    // testAutoFood();
-    testAutoMove()
+    resetGame();
 });
